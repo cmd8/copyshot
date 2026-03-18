@@ -16,6 +16,48 @@ def find_session_jsonl(projects_root: Path, session_id: str) -> Path | None:
     return None
 
 
+def find_active_leaf(records: list[dict]) -> dict | None:
+    """Find the leaf of the currently active branch.
+
+    The last file-history-snapshot before the final last-prompt record
+    contains a messageId pointing to the root of the active branch.
+    We walk from that root down to its leaf via the child graph.
+    Falls back to the last record if no snapshot is found.
+    """
+    by_uuid = {}
+    children: dict[str, list[str]] = {}
+    for rec in records:
+        uuid = rec.get("uuid")
+        if uuid:
+            by_uuid[uuid] = rec
+            parent = rec.get("parentUuid")
+            if parent:
+                children.setdefault(parent, []).append(uuid)
+
+    # Find the last file-history-snapshot before the final last-prompt
+    branch_root_uuid = None
+    for i in range(len(records) - 1, -1, -1):
+        if records[i].get("type") == "last-prompt":
+            for j in range(i - 1, -1, -1):
+                if records[j].get("type") == "file-history-snapshot":
+                    branch_root_uuid = records[j].get("messageId")
+                    break
+            break
+
+    if branch_root_uuid and branch_root_uuid in by_uuid:
+        # Walk down from root to leaf (take last child at each step)
+        current = branch_root_uuid
+        while current in children:
+            current = children[current][-1]
+        return by_uuid.get(current)
+
+    # Fallback: last record with a uuid
+    for rec in reversed(records):
+        if rec.get("uuid"):
+            return rec
+    return None
+
+
 def build_active_branch(records: list[dict]) -> list[dict]:
     by_uuid = {}
     for rec in records:
@@ -23,8 +65,9 @@ def build_active_branch(records: list[dict]) -> list[dict]:
         if uuid:
             by_uuid[uuid] = rec
 
+    leaf = find_active_leaf(records)
     branch_uuids = set()
-    current = records[-1] if records else None
+    current = leaf
     while current:
         uuid = current.get("uuid")
         if uuid:
@@ -48,32 +91,21 @@ def extract_last_response(jsonl_path: Path) -> str | None:
                 continue
 
     branch = build_active_branch(records)
+    by_uuid = {r.get("uuid"): r for r in records if r.get("uuid")}
 
-    last_user_idx = None
     for i in range(len(branch) - 1, -1, -1):
-        if branch[i].get("type") in ("human", "user"):
-            last_user_idx = i
-            break
-
-    search_end = last_user_idx if last_user_idx is not None else len(branch)
-    for i in range(search_end - 1, -1, -1):
         rec = branch[i]
         if rec.get("type") != "assistant":
             continue
 
-        preceding_user = None
-        for j in range(i - 1, -1, -1):
-            if branch[j].get("type") in ("human", "user"):
-                preceding_user = branch[j]
-                break
-        if preceding_user:
-            user_content = preceding_user.get("message", {})
-            if isinstance(user_content, dict):
-                user_content = user_content.get("content", "")
-            if isinstance(user_content, list):
-                user_content = " ".join(c.get("text", "") for c in user_content if c.get("type") == "text")
-            if isinstance(user_content, str) and "<local-command-caveat>" in user_content:
-                continue
+        # Walk up parentUuid to find the user message this assistant replies to
+        parent = by_uuid.get(rec.get("parentUuid"))
+        while parent and parent.get("type") != "user":
+            parent = by_uuid.get(parent.get("parentUuid"))
+
+        # Skip if the parent user message is system-injected
+        if parent and parent.get("isMeta"):
+            continue
 
         msg = rec.get("message", {})
         if not isinstance(msg, dict):

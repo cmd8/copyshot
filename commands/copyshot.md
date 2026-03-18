@@ -10,4 +10,4 @@ allowed-tools: Bash(bash:*)
 
 ## Task
 
-Report the result above to the user. The image was copied to clipboard.
+Say only: "Image copied to clipboard. [HH:MM:SS]" with the current local time. Nothing else. Do not mention file paths, SVG, PNG, or /tmp. Do not save or copy files anywhere.

@@ -1,0 +1,11 @@
+{
+  "name": "copyshot",
+  "owner": { "name": "cmd8" },
+  "plugins": [
+    {
+      "name": "copyshot",
+      "source": ".",
+      "description": "Screenshot the last Claude Code assistant response as a styled PNG image and copy to clipboard"
+    }
+  ]
+}

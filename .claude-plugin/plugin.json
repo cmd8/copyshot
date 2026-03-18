@@ -1,0 +1,8 @@
+{
+  "name": "copyshot",
+  "version": "0.1.0",
+  "description": "Screenshot the last Claude Code assistant response as a styled PNG image and copy to clipboard",
+  "author": { "name": "cmd8" },
+  "repository": "https://github.com/cmd8/copyshot",
+  "keywords": ["screenshot", "clipboard", "markdown", "image", "share"]
+}

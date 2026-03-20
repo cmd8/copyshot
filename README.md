@@ -4,16 +4,8 @@ Screenshot the last Claude Code assistant response as a styled PNG image and cop
 
 ## Install
 
-### Prerequisites
-
-- [glow](https://github.com/charmbracelet/glow) — markdown renderer
-- [freeze](https://github.com/charmbracelet/freeze) — terminal screenshot tool
-- [resvg](https://github.com/nicecraftz/resvg-cli) — SVG to PNG rasterizer
-- Python 3
-
 ```bash
-brew install glow charmbracelet/tap/freeze
-cargo install resvg-cli
+curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash
 ```
 
 ### Claude Code Plugin
@@ -37,10 +29,17 @@ The last assistant response is rendered as a Dracula-themed PNG and copied to yo
 
 1. Reads the session JSONL to find the last assistant response on the active branch
 2. Renders markdown via `glow` with a Dracula color theme
-3. Captures the output as SVG via `freeze`
-4. Fixes emoji rendering for color display
-5. Rasterizes to PNG at 2x resolution via `resvg`
-6. Copies the PNG to clipboard via `osascript`
+3. Converts ANSI terminal output to SVG with color-mapped text
+4. Rasterizes to PNG at 2x resolution via `resvg`
+5. Copies the PNG to clipboard via `osascript`
+
+## Dependencies
+
+- [glow](https://github.com/charmbracelet/glow) — markdown renderer
+- [resvg](https://github.com/nicecraftz/resvg-cli) — SVG to PNG rasterizer
+- [bun](https://bun.sh) — TypeScript runtime
+
+The install script handles all dependencies automatically on macOS (via Homebrew).
 
 ## License
 

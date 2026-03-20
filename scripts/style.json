@@ -34,6 +34,7 @@
   "paragraph": {},
   "code_block": {
     "color": "#F8F8F2",
+    "background_color": "#1E1F29",
     "margin": 2,
     "chroma": {
       "theme": "dracula"

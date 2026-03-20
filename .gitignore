@@ -1,3 +1,6 @@
 /tmp/
 *.png
 *.svg
+node_modules/
+bun.lock
+fonts/

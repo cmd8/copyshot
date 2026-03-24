@@ -7,7 +7,7 @@ TMP_INPUT="/tmp/copyshot-input.md"
 TMP_ANSI="/tmp/copyshot-ansi.txt"
 TMP_OUTPUT="/tmp/copyshot-output.png"
 
-python3 "$SCRIPT_DIR/extract-last-response.py" "$1" > "$TMP_INPUT"
+bun "$ROOT_DIR/src/extract-response.ts" "$1" > "$TMP_INPUT"
 
 CLICOLOR_FORCE=1 glow -s "$SCRIPT_DIR/style.json" -w 120 "$TMP_INPUT" | cat > "$TMP_ANSI"
 

@@ -193,7 +193,7 @@ export function svgToPng(svgPath: string, pngPath: string, scale = 2): void {
 
 // ── CLI ──────────────────────────────────────────────────────
 
-if (process.argv[1]?.endsWith("ansi-to-png.ts")) {
+if (process.argv[1]?.endsWith("pipeline.ts")) {
   const input = readFileSync(process.argv[2] || "/dev/stdin", "utf-8");
   const svgPath = "/tmp/copyshot-output.svg";
   const pngPath = process.argv[3] || "/tmp/copyshot-output.png";

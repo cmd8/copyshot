@@ -28,10 +28,11 @@ The last assistant response is rendered as a Dracula-themed PNG and copied to yo
 ## How It Works
 
 1. Reads the session JSONL to find the last assistant response on the active branch
-2. Renders markdown via `glow` with a Dracula color theme
-3. Converts ANSI terminal output to SVG with color-mapped text
-4. Rasterizes to PNG at 2x resolution via `resvg`
-5. Copies the PNG to clipboard via `osascript`
+2. Syntax-highlights fenced code blocks via `shiki` (Dracula theme)
+3. Renders markdown via `glow` with a Dracula color theme
+4. Converts ANSI terminal output to SVG with color-mapped text
+5. Rasterizes to PNG at 2x resolution via `resvg`
+6. Copies the PNG to clipboard via `osascript`
 
 ## Dependencies
 

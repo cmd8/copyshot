@@ -26,8 +26,7 @@ curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.
 
 ## How It Works
 
-<!-- TODO: replace with copyshot-generated architecture image -->
-![How copyshot works](docs/architecture.png)
+<img src="https://github.com/user-attachments/assets/1fbf3a85-3e14-4ccf-9d3c-cf4755656eba" alt="How copyshot works" width="500">
 
 ## Dependencies
 

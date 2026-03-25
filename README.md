@@ -12,12 +12,6 @@ curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.
 
 Requires macOS. The script installs all dependencies via Homebrew.
 
-If `~/.claude/commands/copyshot.md` already exists, the installer will stop to avoid overwriting your data. Re-run with `--force` to overwrite:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash -s -- --force
-```
-
 ## Usage
 
 ```

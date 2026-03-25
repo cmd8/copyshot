@@ -5,29 +5,8 @@ REPO="cmd8/copyshot"
 INSTALL_DIR="$HOME/.local/share/copyshot"
 COMMAND_FILE="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/commands/copyshot.md"
 
-# Parse flags
-force=false
-for arg in "$@"; do
-    case "$arg" in
-        --force|-f) force=true ;;
-    esac
-done
-[ "${COPYSHOT_FORCE:-}" = "1" ] && force=true
-
 echo "=== copyshot installer ==="
 echo ""
-
-# Check if command file already exists
-if [ -f "$COMMAND_FILE" ] && [ "$force" = false ]; then
-    echo "Error: $COMMAND_FILE already exists."
-    echo ""
-    echo "To avoid overwriting your data, installation was stopped."
-    echo "Options:"
-    echo "  • Delete or rename the file and re-run the installer"
-    echo "  • Re-run with --force to overwrite:"
-    echo "    curl -fsSL https://raw.githubusercontent.com/${REPO}/main/scripts/install.sh | bash -s -- --force"
-    exit 1
-fi
 
 # Detect OS
 case "$(uname -s)" in

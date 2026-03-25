@@ -1,16 +1,14 @@
 # copyshot
 
-You just got a perfect response from Claude Code — a clean explanation, a working code block, a neat table. You want to share it. But screenshots look rough, copy-paste loses formatting, and there's no export button.
+Claude Code has no way to export a response. Screenshots lose formatting, copy-paste strips colors. `/copyshot` grabs the last assistant response, renders it as a PNG with syntax highlighting, and copies it to your clipboard.
 
-`/copyshot` turns the last assistant response into a styled PNG and copies it to your clipboard. One command, paste anywhere.
-
-## Install
+## Install (macOS only)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash
 ```
 
-Requires macOS. The script installs all dependencies via Homebrew.
+Installs dependencies via Homebrew, downloads fonts, and adds the `/copyshot` command to Claude Code.
 
 ## Usage
 

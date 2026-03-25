@@ -1,6 +1,6 @@
 # copyshot
 
-Claude Code has no way to export a response. Screenshots lose formatting, copy-paste strips colors. `/copyshot` grabs the last assistant response, renders it as a PNG with syntax highlighting, and copies it to your clipboard.
+Claude Code can `/copy` text or `/export` a chat, but sharing a single response as an image means screenshotting your terminal. `/copyshot` renders the last response as a PNG with syntax highlighting and copies it to your clipboard.
 
 ## Install (macOS only)
 

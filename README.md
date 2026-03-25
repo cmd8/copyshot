@@ -8,14 +8,11 @@ Screenshot the last Claude Code assistant response as a styled PNG image and cop
 curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash
 ```
 
-### Claude Code Plugin
+If `~/.claude/commands/copyshot.md` already exists, the installer will stop to avoid overwriting your data. To force overwrite:
 
+```bash
+curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash -s -- --force
 ```
-/plugin marketplace add cmd8/copyshot
-/plugin install copyshot@copyshot
-```
-
-Restart Claude Code after installing.
 
 ## Usage
 
@@ -37,8 +34,8 @@ The last assistant response is rendered as a Dracula-themed PNG and copied to yo
 ## Dependencies
 
 - [glow](https://github.com/charmbracelet/glow) — markdown renderer
-- [resvg](https://github.com/nicecraftz/resvg-cli) — SVG to PNG rasterizer
-- [bun](https://bun.sh) — TypeScript runtime
+- [resvg](https://github.com/linebender/resvg) — SVG to PNG rasterizer
+- [bun](https://bun.sh) — TypeScript runtime and package manager
 
 The install script handles all dependencies automatically on macOS (via Homebrew).
 

@@ -6,8 +6,8 @@ allowed-tools: Bash(bash:*)
 
 ## Result
 
-!`bash ${CLAUDE_PLUGIN_ROOT}/scripts/copyshot.sh ${CLAUDE_SESSION_ID}`
+!`bash $HOME/.local/share/copyshot/scripts/copyshot.sh ${CLAUDE_SESSION_ID}`
 
 ## Task
 
-Say only: "Image copied to clipboard." — nothing else. Do not mention file paths, SVG, PNG, or /tmp. Do not save or copy files anywhere.
+Say only: "Image copied to clipboard. [HH:MM:SS]" with the current local time. Nothing else. Do not mention file paths, SVG, PNG, or /tmp. Do not save or copy files anywhere.

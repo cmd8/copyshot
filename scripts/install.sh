@@ -1,8 +1,33 @@
 #!/bin/bash
 set -e
 
+REPO="cmd8/copyshot"
+INSTALL_DIR="$HOME/.local/share/copyshot"
+COMMAND_FILE="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/commands/copyshot.md"
+
+# Parse flags
+force=false
+for arg in "$@"; do
+    case "$arg" in
+        --force|-f) force=true ;;
+    esac
+done
+[ "${COPYSHOT_FORCE:-}" = "1" ] && force=true
+
 echo "=== copyshot installer ==="
 echo ""
+
+# Check if command file already exists
+if [ -f "$COMMAND_FILE" ] && [ "$force" = false ]; then
+    echo "Error: $COMMAND_FILE already exists."
+    echo ""
+    echo "To avoid overwriting your data, installation was stopped."
+    echo "Options:"
+    echo "  • Delete or rename the file and re-run the installer"
+    echo "  • Re-run with --force to overwrite:"
+    echo "    curl -fsSL https://raw.githubusercontent.com/${REPO}/main/scripts/install.sh | bash -s -- --force"
+    exit 1
+fi
 
 # Detect OS
 case "$(uname -s)" in
@@ -58,14 +83,27 @@ if [ ${#missing[@]} -gt 0 ]; then
     fi
 fi
 
-# Determine install location
-PLUGIN_DIR="${COPYSHOT_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
-FONTS_DIR="$PLUGIN_DIR/fonts"
-mkdir -p "$FONTS_DIR"
+# Download/update copyshot source
+echo ""
+if [ -d "$INSTALL_DIR/.git" ]; then
+    echo "Updating copyshot..."
+    git -C "$INSTALL_DIR" pull --quiet
+else
+    echo "Downloading copyshot..."
+    rm -rf "$INSTALL_DIR"
+    git clone --depth 1 "https://github.com/${REPO}.git" "$INSTALL_DIR" --quiet
+fi
+
+# Install npm dependencies
+echo "Installing dependencies..."
+(cd "$INSTALL_DIR" && bun install --silent)
 
 # Download fonts
+FONTS_DIR="$INSTALL_DIR/fonts"
+mkdir -p "$FONTS_DIR"
+
 echo ""
-echo "Downloading fonts..."
+echo "Checking fonts..."
 
 if [ ! -f "$FONTS_DIR/JetBrainsMono-Regular.ttf" ]; then
     echo "  Downloading JetBrains Mono..."
@@ -87,11 +125,30 @@ else
     echo "  ✓ Noto Color Emoji (already installed)"
 fi
 
+# Install slash command
+COMMANDS_DIR="$(dirname "$COMMAND_FILE")"
+mkdir -p "$COMMANDS_DIR"
+
+cat > "$COMMAND_FILE" << 'COMMAND_EOF'
+---
+name: copyshot
+description: Screenshot the last assistant response as a styled PNG image and copy to clipboard
+allowed-tools: Bash(bash:*)
+---
+
+## Result
+
+!`bash $HOME/.local/share/copyshot/scripts/copyshot.sh ${CLAUDE_SESSION_ID}`
+
+## Task
+
+Say only: "Image copied to clipboard. [HH:MM:SS]" with the current local time. Nothing else. Do not mention file paths, SVG, PNG, or /tmp. Do not save or copy files anywhere.
+COMMAND_EOF
+
 echo ""
 echo "=== copyshot installed ==="
 echo ""
-echo "Install the Claude Code plugin:"
-echo "  /plugin marketplace add cmd8/copyshot"
-echo "  /plugin install copyshot@copyshot"
+echo "Installed to: $INSTALL_DIR"
+echo "Command:      $COMMAND_FILE"
 echo ""
-echo "Then restart Claude Code. Use /copyshot to screenshot the last response."
+echo "Use /copyshot in Claude Code to screenshot the last response."

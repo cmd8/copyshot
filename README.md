@@ -1,6 +1,8 @@
 # copyshot
 
-Screenshot the last Claude Code assistant response as a styled PNG image and copy it to your clipboard.
+You just got a perfect response from Claude Code — a clean explanation, a working code block, a neat table. You want to share it. But screenshots look rough, copy-paste loses formatting, and there's no export button.
+
+`/copyshot` turns the last assistant response into a styled PNG and copies it to your clipboard. One command, paste anywhere.
 
 ## Install
 
@@ -8,7 +10,9 @@ Screenshot the last Claude Code assistant response as a styled PNG image and cop
 curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash
 ```
 
-If `~/.claude/commands/copyshot.md` already exists, the installer will stop to avoid overwriting your data. To force overwrite:
+Requires macOS. The script installs all dependencies via Homebrew.
+
+If `~/.claude/commands/copyshot.md` already exists, the installer will stop to avoid overwriting your data. Re-run with `--force` to overwrite:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.sh | bash -s -- --force
@@ -20,24 +24,16 @@ curl -fsSL https://raw.githubusercontent.com/cmd8/copyshot/main/scripts/install.
 /copyshot
 ```
 
-The last assistant response is rendered as a Dracula-themed PNG and copied to your clipboard. Paste it anywhere.
-
 ## How It Works
 
-1. Reads the session JSONL to find the last assistant response on the active branch
-2. Syntax-highlights fenced code blocks via `shiki` (Dracula theme)
-3. Renders markdown via `glow` with a Dracula color theme
-4. Converts ANSI terminal output to SVG with color-mapped text
-5. Rasterizes to PNG at 2x resolution via `resvg`
-6. Copies the PNG to clipboard via `osascript`
+<!-- TODO: replace with copyshot-generated architecture image -->
+![How copyshot works](docs/architecture.png)
 
 ## Dependencies
 
 - [glow](https://github.com/charmbracelet/glow) — markdown renderer
 - [resvg](https://github.com/linebender/resvg) — SVG to PNG rasterizer
 - [bun](https://bun.sh) — TypeScript runtime and package manager
-
-The install script handles all dependencies automatically on macOS (via Homebrew).
 
 ## License
 
